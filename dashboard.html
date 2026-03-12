@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>COMMAND DASHBOARD | PRC-QC ERU</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-table th {
+            border-bottom: 2px solid rgba(220, 38, 38, 0.5);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 14px;
+                width: 14px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .slider {
+            background-color: #ef4444;
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(20px);
+            }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen">
+
+    <script>
+        if (sessionStorage.getItem("isLoggedIn") !== "true") { window.location.href = "login.html"; }
+    </script>
+
+    <div class="flex">
+        <aside class="w-64 bg-slate-950 min-h-screen p-6 border-r border-white/5 sticky top-0 h-screen no-print">
+            <div class="flex items-center space-x-3 mb-10">
+                <img src="ERU.jpeg" class="h-8 w-auto rounded">
+                <span class="text-xs font-black uppercase tracking-widest text-red-600">Command Center</span>
+            </div>
+            <nav class="space-y-4">
+                <a href="dashboard.html" class="block text-xs font-bold text-white bg-red-600 p-3 rounded tracking-widest uppercase shadow-lg shadow-red-600/20">Operational Overview</a>
+
+                <a href="personnel_files.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase transition">Personnel 201 Files</a>
+
+                <a href="services_ops.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase transition">Services & Operations</a>
+
+                <a href="meeting.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase transition">Meeting Logs</a>
+
+                <div class="pt-10 border-t border-white/5">
+                    <button onclick="logout()" class="text-[10px] font-black text-red-500 uppercase tracking-widest hover:text-red-400 transition">Terminate Session</button>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="flex-grow p-8">
+            <header class="flex justify-between items-end mb-12 no-print">
+                <div>
+                    <h1 class="text-3xl font-black uppercase tracking-tighter text-white">System Dashboard</h1>
+                    <p class="text-slate-500 text-sm font-medium tracking-tight">Active Duty Roster | <span id="userDisplay" class="text-red-500 font-bold uppercase">Personnel</span></p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded text-[10px] font-black uppercase border border-white/10 transition">Print PDF</button>
+                    <button onclick="exportToExcel()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded text-[10px] font-black uppercase transition">Export CSV</button>
+                </div>
+            </header>
+
+            <section class="bg-slate-900/50 p-8 rounded-2xl border border-white/5 shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 no-print">
+                    <h3 class="text-sm font-black uppercase tracking-widest flex items-center">
+                        <span class="w-2 h-2 bg-red-600 rounded-full mr-3 animate-pulse"></span> Unit Roster
+                    </h3>
+
+                    <div class="flex items-center space-x-3">
+                        <input type="file" id="csvUpload" accept=".csv" class="hidden" onchange="handleBulkUpload(event)">
+                        <button onclick="document.getElementById('csvUpload').click()" class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 rounded font-black text-[10px] uppercase tracking-widest transition border border-white/10">
+                            Bulk Import (CSV)
+                        </button>
+                        <button onclick="openModal('add')" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-red-600/20">
+                            Add Personnel
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm custom-table">
+                        <thead>
+                            <tr class="text-slate-500 uppercase text-[10px] font-black tracking-widest">
+                                <th class="pb-4 px-2">Name & Info</th>
+                                <th class="pb-4 px-2 no-print">Duty Status</th>
+                                <th class="pb-4 px-2">MAAB ID</th>
+                                <th class="pb-4 px-2">Role</th>
+                                <th class="pb-4 px-2 text-right no-print">Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody id="responderTableBody" class="divide-y divide-white/5"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="responderModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center z-50 p-4 no-print">
+        <div class="bg-slate-900 border border-white/10 w-full max-w-md rounded-2xl p-8 shadow-2xl">
+            <h3 id="modalTitle" class="text-white font-black uppercase tracking-widest mb-8 text-center border-b border-white/10 pb-4">Personnel File</h3>
+            <input type="hidden" id="editIndex">
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 mb-1 block">Full Name</label>
+                    <input type="text" id="respName" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 mb-1 block">MAAB No.</label>
+                        <input type="text" id="respMaab" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 mb-1 block">Contact Number</label>
+                        <input type="text" id="respContact" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 mb-1 block">Designation</label>
+                    <select id="respRole" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                        <option value="TEAM LEADER">TEAM LEADER</option>
+                        <option value="EMT-B">EMT-B</option>
+                        <option value="FIRST RESPONDER">FIRST RESPONDER</option>
+                        <option value="FIRST AIDER">FIRST AIDER</option>
+                        <option value="SAR">SAR</option>
+                        <option value="EVO">EVO</option>
+                        <option value="MONITORING OFFICER">MONITORING OFFICER</option>
+                        <option value="ERU LOGISTICS">ERU LOGISTICS</option>
+                        <option value="CREW">CREW</option>
+                        <option value="MASTER TEACHER 1">MASTER TEACHER 1</option>
+                    </select>
+                </div>
+                <div class="flex space-x-3 pt-6">
+                    <button id="saveBtn" onclick="saveResponder()" class="flex-grow bg-red-600 py-4 rounded-lg font-black text-xs uppercase tracking-widest text-white hover:bg-red-700 transition-all">Commit Record</button>
+                    <button onclick="closeModal()" class="px-8 bg-slate-800 py-4 rounded-lg font-black text-xs uppercase tracking-widest text-slate-400 hover:bg-slate-700 hover:text-white transition-all">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('userDisplay').innerText = sessionStorage.getItem("username") || "Personnel";
+        let responders = JSON.parse(localStorage.getItem('eru_responders')) || [];
+
+        function renderTable() {
+            const body = document.getElementById('responderTableBody');
+            body.innerHTML = '';
+            responders.forEach((resp, index) => {
+                body.innerHTML += `
+                    <tr class="hover:bg-white/[0.02] border-b border-white/5 transition">
+                        <td class="py-5 px-2">
+                            <span class="block font-bold text-slate-100 uppercase">${resp.name}</span>
+                            <a href="tel:${resp.contact}" class="text-[10px] text-blue-400 font-mono hover:underline">${resp.contact}</a>
+                        </td>
+                        <td class="py-5 px-2 no-print">
+                            <label class="switch">
+                                <input type="checkbox" ${resp.onDuty ? 'checked' : ''} onchange="toggleDuty(${index})">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td class="py-5 px-2 font-mono text-[11px] text-red-500 font-bold tracking-widest">${resp.maab}</td>
+                        <td class="py-5 px-2"><span class="bg-slate-800 text-slate-300 px-3 py-1 rounded text-[9px] font-black uppercase tracking-wider">${resp.role}</span></td>
+                        <td class="py-5 px-2 text-right no-print">
+                            <button onclick="openModal('edit', ${index})" class="text-slate-500 hover:text-white font-black text-[9px] uppercase tracking-widest mr-4">Edit</button>
+                            <button onclick="deleteResponder(${index})" class="text-red-900 hover:text-red-500 font-black text-[9px] uppercase tracking-widest">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            localStorage.setItem('eru_responders', JSON.stringify(responders));
+        }
+
+        // Logic functions remain unchanged for data integrity
+        function handleBulkUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const rows = text.split('\n').slice(1);
+                rows.forEach(row => {
+                    const columns = row.split(',');
+                    if (columns.length >= 3) {
+                        responders.push({
+                            name: columns[0].trim(),
+                            contact: columns[1].trim(),
+                            maab: columns[2].trim(),
+                            role: columns[3] ? columns[3].trim().toUpperCase() : 'FIRST RESPONDER',
+                            onDuty: false
+                        });
+                    }
+                });
+                renderTable();
+                alert("Bulk Personnel Import Completed.");
+            };
+            reader.readAsText(file);
+        }
+
+        function exportToExcel() {
+            let csv = "Name,Contact,MAAB ID,Role,Status\n";
+            responders.forEach(r => { csv += `${r.name},${r.contact},${r.maab},${r.role},${r.onDuty ? 'ON DUTY' : 'OFF DUTY'}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'QC_ERU_ROSTER.csv'; a.click();
+        }
+
+        function toggleDuty(index) { responders[index].onDuty = !responders[index].onDuty; renderTable(); }
+        function openModal(mode, index = null) {
+            document.getElementById('responderModal').classList.remove('hidden');
+            if (mode === 'edit') {
+                const d = responders[index];
+                document.getElementById('respName').value = d.name;
+                document.getElementById('respMaab').value = d.maab;
+                document.getElementById('respContact').value = d.contact;
+                document.getElementById('respRole').value = d.role;
+                document.getElementById('editIndex').value = index;
+            } else {
+                document.getElementById('editIndex').value = '';
+                document.getElementById('respName').value = '';
+                document.getElementById('respMaab').value = '';
+                document.getElementById('respContact').value = '';
+            }
+        }
+        function closeModal() { document.getElementById('responderModal').classList.add('hidden'); }
+        function saveResponder() {
+            const name = document.getElementById('respName').value;
+            const maab = document.getElementById('respMaab').value;
+            const contact = document.getElementById('respContact').value;
+            const role = document.getElementById('respRole').value;
+            const editIndex = document.getElementById('editIndex').value;
+            if (!name || !maab) return alert("Required: Name & MAAB ID");
+            if (editIndex !== "") {
+                responders[editIndex] = { ...responders[editIndex], name, maab, contact, role };
+            } else {
+                responders.push({ name, maab, contact, role, onDuty: false });
+            }
+            renderTable(); closeModal();
+        }
+        function deleteResponder(i) { if(confirm("Confirm Removal?")) { responders.splice(i, 1); renderTable(); } }
+        function logout() { sessionStorage.clear(); window.location.href = "login.html"; }
+        renderTable();
+    </script>
+</body>
+</html>

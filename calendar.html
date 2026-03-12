@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Operations Calendar | PRC-QC ERU</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .day-box {
+            min-height: 120px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+            .day-box:hover {
+                background-color: #f1f5f9;
+            }
+
+        .event-tag {
+            font-size: 9px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="bg-white p-4 border-b border-gray-200 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="RED CROSS EMBLEM.png" class="h-8">
+                <span class="font-black uppercase tracking-tighter text-slate-900 text-sm">Ops Schedule</span>
+            </div>
+            <a href="ERU2.HTML" class="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-red-600 transition">← Return to Portal</a>
+        </div>
+    </nav>
+
+    <header class="bg-slate-900 py-10 px-6 text-white border-b-4 border-red-600">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black uppercase tracking-tight">March 2026</h1>
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Unit Deployment & Training Cycle</p>
+            </div>
+            <div class="mt-6 md:mt-0 flex space-x-2">
+                <div class="flex items-center space-x-2 bg-slate-800 px-4 py-2 rounded">
+                    <span class="w-2 h-2 bg-red-600 rounded-full"></span>
+                    <span class="text-[9px] font-black uppercase">Mandatory</span>
+                </div>
+                <div class="flex items-center space-x-2 bg-slate-800 px-4 py-2 rounded">
+                    <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                    <span class="text-[9px] font-black uppercase">Training</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 px-6">
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="calendar-grid bg-slate-100 border-b border-gray-200">
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Sun</div>
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Mon</div>
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Tue</div>
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Wed</div>
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Thu</div>
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Fri</div>
+                <div class="py-4 text-center text-[10px] font-black text-slate-500 uppercase">Sat</div>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="day-box p-3 text-xs font-bold text-slate-300">1</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-300">2</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-300">3</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-300">4</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-300">5</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-300">6</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-300">7</div>
+
+                <div class="day-box p-3 text-xs font-bold text-slate-800">8</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">9</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">10</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">11</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">
+                    12
+                    <div class="event-tag bg-blue-100 text-blue-700">WASAR Review</div>
+                </div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">13</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">14</div>
+
+                <div class="day-box p-3 text-xs font-bold text-slate-800">15</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">16</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">17</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">18</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">19</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">20</div>
+                <div class="day-box p-3 text-xs font-bold bg-red-50 text-slate-900 border-2 border-red-600">
+                    21
+                    <div class="event-tag bg-red-600 text-white">Q1 Assembly</div>
+                    <div class="text-[8px] mt-1 text-red-600 uppercase font-black">0800H @ HQ</div>
+                </div>
+
+                <div class="day-box p-3 text-xs font-bold text-slate-800">22</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">23</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">24</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">25</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">26</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">27</div>
+                <div class="day-box p-3 text-xs font-bold text-slate-800">28</div>
+            </div>
+        </div>
+
+        <div class="mt-12 grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <h3 class="text-xs font-black uppercase text-red-600 tracking-widest mb-4">Upcoming Highlight</h3>
+                <div class="flex space-x-4">
+                    <div class="bg-slate-900 text-white p-3 rounded text-center min-w-[60px]">
+                        <p class="text-[10px] uppercase font-bold">Mar</p>
+                        <p class="text-xl font-black">21</p>
+                    </div>
+                    <div>
+                        <h4 class="font-black uppercase text-sm">1st Quarter General Meeting</h4>
+                        <p class="text-xs text-gray-500 mt-1 italic">Mandatory attendance for all 1st District Volunteers.</p>
+                        <a href="meeting.html" class="inline-block mt-3 text-[10px] font-black text-red-600 uppercase hover:underline">Open Briefing →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-6 rounded-xl shadow-xl text-white">
+                <h3 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Duty Officer Notes</h3>
+                <ul class="text-[11px] space-y-3 font-medium opacity-80">
+                    <li class="flex items-start">
+                        <span class="mr-2">⚡</span> Ensure all trauma bags are MARCH compliant for March deployments.
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2">📍</span> Deployment slots for Traslacion 2026 debriefing are now open.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-gray-200 text-center">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">PRC QC-ERU | Command & Control System</p>
+    </footer>
+
+</body>
+</html>

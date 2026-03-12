@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Q1 GENERAL ASSEMBLY | PRC-QC ERU</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .timeline-border {
+            border-left: 2px dashed #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <nav class="bg-white p-4 border-b-4 border-red-600 shadow-sm sticky top-0 z-50 no-print">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="RED CROSS EMBLEM.png" class="h-10">
+                <span class="font-black uppercase tracking-tighter">Command Briefing</span>
+            </div>
+            <a href="ERU2.HTML" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-red-600">← Back to Portal</a>
+        </div>
+    </nav>
+
+    <header class="bg-slate-900 py-16 px-6 text-white">
+        <div class="container mx-auto max-w-5xl">
+            <div class="inline-block bg-red-600 text-[10px] font-black px-3 py-1 uppercase tracking-widest mb-4">Official Notice: Q1-2026</div>
+            <h1 class="text-4xl md:text-5xl font-black uppercase mb-4">1st Quarter General Meeting</h1>
+            <p class="text-slate-400 font-bold uppercase text-sm tracking-widest">March 21, 2026 | PRC-QC Chapter Headquarters</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 px-6 max-w-5xl">
+        <div class="grid lg:grid-cols-3 gap-12">
+
+            <div class="lg:col-span-1 space-y-8">
+                <div>
+                    <h3 class="text-sm font-black text-red-600 uppercase tracking-widest mb-6">Program of Activities</h3>
+                    <div class="space-y-6 relative timeline-border pl-6 text-xs">
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-red-600 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">5:30-6:30am</p>
+                            <p class="font-bold uppercase">Physical Fitness</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-slate-300 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">6:30-7:00am</p>
+                            <p class="font-bold uppercase">Breakfast</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-slate-300 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">7:00-7:45am</p>
+                            <p class="font-bold uppercase">Registration</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-red-600 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">8:00-8:15am</p>
+                            <p class="font-bold uppercase">Opening Program</p>
+                            <p class="italic text-gray-500">Anthem & Prayer</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-slate-800 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">8:20-8:50am</p>
+                            <p class="font-bold uppercase">Code of Ethics EMS/ERU</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-slate-800 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">8:50-9:30am</p>
+                            <p class="font-bold uppercase">Recap of Past Operations</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-red-600 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">9:30-11:30am</p>
+                            <p class="font-bold uppercase">SOP (Standard Operating Procedures)</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-slate-300 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">11:30-11:50am</p>
+                            <p class="font-bold uppercase">FQA</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-green-600 rounded-full border-4 border-white"></span>
+                            <p class="font-black text-slate-400 uppercase">12:00 PM</p>
+                            <p class="font-bold uppercase">Lunch Break</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm no-print">
+                    <h3 class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-4">Briefing Documents</h3>
+                    <div class="space-y-3">
+                        <input type="file" id="fileAttachment" class="hidden" onchange="handleFileSelect(event)">
+                        <button onclick="document.getElementById('fileAttachment').click()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded text-[10px] font-black uppercase tracking-widest transition border border-slate-200">
+                            📎 Attach Document
+                        </button>
+                        <div id="fileStatus" class="hidden py-2 px-3 bg-blue-50 border border-blue-100 rounded">
+                            <p id="fileNameDisplay" class="text-[10px] font-bold text-blue-700 truncate uppercase"></p>
+                            <button onclick="downloadAttachedFile()" class="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded text-[9px] font-black uppercase tracking-widest transition">
+                                ↓ Download Briefing
+                            </button>
+                        </div>
+                        <p class="text-[9px] text-gray-400 italic text-center mt-2">Max Size: 100MB</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-8">
+
+                <section class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center mb-8">
+                        <div class="bg-red-600 w-1 h-6 mr-4"></div>
+                        <h3 class="text-xl font-black uppercase tracking-tight">Strategic Meeting Highlights</h3>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="flex space-x-4">
+                            <div class="text-red-600 font-black text-lg">01</div>
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">Governance & Ethics</h4>
+                                <p class="text-xs leading-relaxed text-gray-600">
+                                    Mandatory implementation of the <strong>ERU Code of Ethics</strong>. Defining clear boundaries between Staff and Volunteer roles to eliminate authority overlap.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4">
+                            <div class="text-red-600 font-black text-lg">02</div>
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">Training & Competency</h4>
+                                <p class="text-xs leading-relaxed text-gray-600">
+                                    Launch of the <strong>Skill Matrix</strong> for transparent task delegation and professional growth ladders.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4">
+                            <div class="text-red-600 font-black text-lg">03</div>
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">Accountability (201 Files)</h4>
+                                <p class="text-xs leading-relaxed text-gray-600">
+                                    Standardization of <strong>201 Personnel Files</strong> to strengthen legal protection and organizational transparency.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4">
+                            <div class="text-red-600 font-black text-lg">04</div>
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">EVO System Reform</h4>
+                                <p class="text-xs leading-relaxed text-gray-600">
+                                    Qualification-based driving assignments requiring valid <strong>EVOC and BLS certifications</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="bg-slate-900 text-white p-8 rounded-2xl shadow-xl">
+                    <h3 class="text-sm font-black uppercase tracking-widest mb-8 text-red-500">Working Committee</h3>
+                    <div class="grid md:grid-cols-2 gap-8 text-sm uppercase">
+
+                        <div>
+                            <p class="text-[9px] text-slate-500 mb-1 tracking-widest">Enhancement</p>
+                            <p class="font-bold">Ruel Vicente, EMR</p>
+                        </div>
+
+                        <div>
+                            <p class="text-[9px] text-slate-500 mb-1 tracking-widest">Logistics</p>
+                            <p class="font-bold">Eugene Gongora, LPT, MAEdPE, EdD</p>
+                        </div>
+
+                        <div>
+                            <p class="text-[9px] text-slate-500 mb-1 tracking-widest">Documentary</p>
+                            <p class="font-bold">Nelvin Maraño</p>
+                        </div>
+
+                        <div>
+                            <p class="text-[9px] text-slate-500 mb-1 tracking-widest">Overall Committee</p>
+                            <p class="font-bold">Maria Jonalina Sobrevila, EMT</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-center no-print pt-4">
+                    <button onclick="window.print()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-8 py-3 rounded font-black text-xs uppercase tracking-widest transition">Print Official Agenda</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-12 py-8 border-t border-gray-200 text-center">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Philippine Red Cross | QC-ERU Command</p>
+    </footer>
+
+    <script>
+        let attachedFile = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 100 * 1024 * 1024) {
+                alert("File exceeds 100MB limit.");
+                return;
+            }
+
+            attachedFile = file;
+            document.getElementById('fileStatus').classList.remove('hidden');
+            document.getElementById('fileNameDisplay').innerText = `Attached: ${file.name}`;
+        }
+
+        function downloadAttachedFile() {
+            if (!attachedFile) return;
+            const url = URL.createObjectURL(attachedFile);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = attachedFile.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

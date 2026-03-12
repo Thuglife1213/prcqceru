@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>SERVICES & OPERATIONS | PRC-QC ERU</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen">
+
+    <div class="flex">
+        <aside class="w-64 bg-slate-950 min-h-screen p-6 border-r border-white/5 sticky top-0 h-screen no-print">
+            <div class="flex items-center space-x-3 mb-10">
+                <img src="ERU.jpeg" class="h-8 w-auto rounded">
+                <span class="text-xs font-black uppercase tracking-widest text-red-600">Command Center</span>
+            </div>
+            <nav class="space-y-4">
+                <a href="dashboard.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase transition">Overview</a>
+                <a href="personnel_files.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase transition">201 Files</a>
+                <a href="services_ops.html" class="block text-xs font-bold text-white bg-red-600 p-3 rounded tracking-widest uppercase shadow-lg shadow-red-600/20">Services & Ops</a>
+            </nav>
+        </aside>
+
+        <main class="flex-grow p-8">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <h1 class="text-3xl font-black uppercase tracking-tighter text-white">Services & Operations</h1>
+                    <p class="text-slate-500 text-sm font-medium tracking-tight">Active Deployment & Dispatch Control</p>
+                </div>
+                <button onclick="openOpModal()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded text-[10px] font-black uppercase tracking-widest transition shadow-lg shadow-red-600/20">
+                    Log New Operation
+                </button>
+            </header>
+
+            <div id="opsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+        </main>
+    </div>
+
+    <div id="opModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-white/10 w-full max-w-2xl rounded-2xl p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <h3 class="text-white font-black uppercase tracking-widest mb-8 text-center border-b border-white/10 pb-4">Operational Entry</h3>
+
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Event Name (What)</label>
+                        <input type="text" id="opName" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Point of Contact</label>
+                        <input type="text" id="opContact" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Date/Time (When)</label>
+                        <input type="datetime-local" id="opWhen" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Location (Where)</label>
+                        <input type="text" id="opWhere" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Service Type Selection</label>
+                    <select id="opType" onchange="togglePersonnelFields()" class="w-full bg-slate-950 border border-white/5 rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none">
+                        <option value="AMBULANCE">Ambulance Service Only</option>
+                        <option value="AMBULANCE_FAS">Ambulance Service with FAS</option>
+                        <option value="FAS_ONLY">FAS (First Aid Station) Only</option>
+                    </select>
+                </div>
+
+                <div id="ambTeamSection" class="bg-slate-950/50 p-4 rounded-xl border border-white/5">
+                    <h4 class="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-3">Ambulance Unit</h4>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">EVO</label>
+                            <select id="assignEVO" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">Team Leader</label>
+                            <select id="assignAmbTL" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">Crew</label>
+                            <select id="assignAmbCrew" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="fasTeamSection" class="hidden bg-slate-950/50 p-4 rounded-xl border border-white/5">
+                    <h4 class="text-[9px] font-black text-red-500 uppercase tracking-widest mb-3">FAS Station Team</h4>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">FAS TL</label>
+                            <select id="assignFasTL" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">Member 1</label>
+                            <select id="assignM1" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">Member 2</label>
+                            <select id="assignM2" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                        <div>
+                            <label class="text-[8px] font-black text-slate-500 uppercase mb-1 block">Member 3</label>
+                            <select id="assignM3" class="w-full bg-slate-900 border-none rounded p-2 text-[10px] text-white dropdown-populate"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-6">
+                    <button onclick="saveOperation()" class="flex-grow bg-red-600 py-4 rounded-lg font-black text-xs uppercase text-white shadow-lg transition active:scale-95">Deploy Entry</button>
+                    <button onclick="closeOpModal()" class="px-8 bg-slate-800 py-4 rounded-lg font-black text-xs uppercase text-slate-400">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Initialize data from local storage
+    let operations = JSON.parse(localStorage.getItem('eru_ops')) || [];
+    let responders = JSON.parse(localStorage.getItem('eru_responders')) || [];
+
+    // Toggles between Ambulance and FAS fields based on selection
+    function togglePersonnelFields() {
+        const type = document.getElementById('opType').value;
+        const ambSection = document.getElementById('ambTeamSection');
+        const fasSection = document.getElementById('fasTeamSection');
+
+        ambSection.classList.toggle('hidden', type === 'FAS_ONLY');
+        fasSection.classList.toggle('hidden', type === 'AMBULANCE');
+    }
+
+    // Pulls names from your Dashboard Roster to populate the selects
+    function populatePersonnel() {
+        const selects = document.querySelectorAll('.dropdown-populate');
+        selects.forEach(s => {
+            s.innerHTML = '<option value="N/A">Unassigned</option>';
+            responders.forEach(r => {
+                s.innerHTML += `<option value="${r.name}">${r.name}</option>`;
+            });
+        });
+    }
+
+    function openOpModal() {
+        populatePersonnel();
+        document.getElementById('opModal').classList.remove('hidden');
+        togglePersonnelFields();
+    }
+
+    function closeOpModal() {
+        document.getElementById('opModal').classList.add('hidden');
+    }
+
+    // FUNCTIONAL: Deploy and Record Entry
+    function saveOperation() {
+        const op = {
+            name: document.getElementById('opName').value,
+            contact: document.getElementById('opContact').value,
+            when: document.getElementById('opWhen').value,
+            where: document.getElementById('opWhere').value,
+            type: document.getElementById('opType').value,
+            // Ambulance Team Data
+            evo: document.getElementById('assignEVO').value,
+            ambTl: document.getElementById('assignAmbTL').value,
+            ambCrew: document.getElementById('assignAmbCrew').value,
+            // FAS Team Data
+            fasTl: document.getElementById('assignFasTL').value,
+            m1: document.getElementById('assignM1').value,
+            m2: document.getElementById('assignM2').value,
+            m3: document.getElementById('assignM3').value
+        };
+
+        // Validation: Required Fields
+        if (!op.name || !op.when || !op.where) {
+            alert("RECORDING FAILED: What, When, and Where are mandatory fields.");
+            return;
+        }
+
+        // Add to array and Save to LocalStorage
+        operations.push(op);
+        localStorage.setItem('eru_ops', JSON.stringify(operations));
+
+        // Return to main view and update display
+        renderOps();
+        closeOpModal();
+
+        // Clear form for next entry
+        document.getElementById('opName').value = '';
+        document.getElementById('opWhere').value = '';
+    }
+
+    // FUNCTIONAL: Render tactical cards on the grid
+    function renderOps() {
+        const grid = document.getElementById('opsGrid');
+        grid.innerHTML = '';
+
+        operations.forEach((op, index) => {
+            let teamDisplay = '';
+
+            // Generate Ambulance Team Visuals
+            if (op.type.includes('AMBULANCE')) {
+                teamDisplay += `
+                    <div class="mt-2 p-3 bg-blue-900/20 rounded border border-blue-500/20 text-[9px]">
+                        <p class="font-black text-blue-400 mb-1 tracking-widest uppercase">Ambulance Team</p>
+                        EVO: ${op.evo} | TL: ${op.ambTl} | CREW: ${op.ambCrew}
+                    </div>`;
+            }
+
+            // Generate FAS Team Visuals
+            if (op.type.includes('FAS')) {
+                teamDisplay += `
+                    <div class="mt-2 p-3 bg-red-900/20 rounded border border-red-500/20 text-[9px]">
+                        <p class="font-black text-red-400 mb-1 tracking-widest uppercase">FAS Team</p>
+                        TL: ${op.fasTl} | M1: ${op.m1}, M2: ${op.m2}, M3: ${op.m3}
+                    </div>`;
+            }
+
+            grid.innerHTML += `
+                <div class="bg-slate-900 border border-white/5 rounded-2xl p-6 shadow-xl hover:border-red-600/30 transition">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">${op.type.replace('_',' & ')}</span>
+                        <button onclick="deleteOp(${index})" class="text-slate-700 hover:text-red-500 transition">✕</button>
+                    </div>
+                    <h3 class="text-lg font-black uppercase text-white">${op.name}</h3>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold mt-1">${op.when.replace('T', ' @ ')}</p>
+                    <p class="text-[9px] text-slate-400 italic mb-4">Location: ${op.where} | POC: ${op.contact}</p>
+
+                    ${teamDisplay}
+
+                    <button onclick="downloadOpDetails(${index})" class="mt-6 w-full bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-[9px] font-black uppercase tracking-[0.2em] transition border border-white/5">
+                        Download Dispatch Order
+                    </button>
+                </div>
+            `;
+        });
+    }
+
+    function downloadOpDetails(index) {
+        const op = operations[index];
+        const dateObj = new Date(op.when);
+        const formattedDate = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        let teamTxt = "";
+        if (op.type.includes('AMBULANCE')) {
+            teamTxt += `\nAMBULANCE TEAM:\n- EVO: ${op.evo}\n- TEAM LEADER: ${op.ambTl}\n- CREW: ${op.ambCrew}\n`;
+        }
+        if (op.type.includes('FAS')) {
+            teamTxt += `\nFAS TEAM:\n- TEAM LEADER: ${op.fasTl}\n- MEMBER 1: ${op.m1}\n- MEMBER 2: ${op.m2}\n- MEMBER 3: ${op.m3}\n`;
+        }
+
+        const content = `=========================================\n      PRC-QC ERU DISPATCH ORDER\n=========================================\n\nWHAT:         ${op.name.toUpperCase()}\nWHERE:        ${op.where.toUpperCase()}\nWHEN:         ${formattedDate.toUpperCase()}\nTIME:         ${formattedTime}\nSERVICE TYPE: ${op.type.replace('_', ' & ').toUpperCase()}\nCONTACT:      ${op.contact.toUpperCase()}\n\n-----------------------------------------\nTEAM COMPOSITION\n-----------------------------------------\n${teamTxt}\n\n=========================================\nGENERATED BY QC-ERU COMMAND CENTER\nDATE: ${new Date().toLocaleString()}\n=========================================`;
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `DISPATCH_${op.name.replace(/\s+/g, '_').toUpperCase()}.txt`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    function deleteOp(index) {
+        if(confirm("Confirm deletion of this deployment record?")) {
+            operations.splice(index, 1);
+            localStorage.setItem('eru_ops', JSON.stringify(operations));
+            renderOps();
+        }
+    }
+
+    // Initial Load of all recorded events
+    renderOps();
+    </script>
+</body>
+</html>

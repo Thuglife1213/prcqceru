@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>SECURE LOGIN | PRC-QC ERU</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div class="max-w-md w-full">
+        <div class="text-center mb-10">
+            <div class="flex justify-center space-x-4 mb-6">
+                <img src="RED CROSS EMBLEM.png" class="h-12 w-auto">
+                <img src="ERU.jpeg" class="h-12 w-auto rounded border border-white/20">
+            </div>
+            <h1 class="text-white text-xl font-black uppercase tracking-[0.2em]">Personnel Access</h1>
+            <p class="text-slate-500 text-xs font-bold mt-2 uppercase">Quezon City ERU Command Portal</p>
+        </div>
+
+        <div class="glass-panel p-10 rounded-2xl shadow-2xl">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-red-500 uppercase tracking-widest mb-2">Service ID / Username</label>
+                    <input type="text" id="username" required
+                           class="w-full bg-slate-900/50 border border-white/10 rounded-lg p-4 text-white placeholder-slate-600 focus:outline-none focus:border-red-600 transition-all"
+                           placeholder="Enter Username">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-red-500 uppercase tracking-widest mb-2">Access Key</label>
+                    <input type="password" id="password" required
+                           class="w-full bg-slate-900/50 border border-white/10 rounded-lg p-4 text-white placeholder-slate-600 focus:outline-none focus:border-red-600 transition-all"
+                           placeholder="••••••••">
+                </div>
+
+                <div id="errorMessage" class="hidden text-red-500 text-[10px] font-bold uppercase text-center animate-bounce">
+                    Invalid Credentials. Access Denied.
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-lg uppercase tracking-widest shadow-lg shadow-red-600/20 transition-all active:scale-95">
+                    Authenticate
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <a href="ERU2.HTML" class="text-slate-500 text-[10px] font-bold uppercase hover:text-white transition tracking-widest">
+                    ← Return to Public Portal
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center text-[9px] text-slate-600 mt-10 uppercase tracking-[0.2em] leading-relaxed">
+            Authorized Personnel Only. <br>All login attempts are logged for audit purposes.
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+
+            // Authorized Accounts
+            const validUsers = {
+                "Master Teacher 1": "ERU2026",
+                "Eugene121695": "12345678"
+            };
+
+            if (validUsers[user] && validUsers[user] === pass) {
+                // SECURE SESSION START
+                sessionStorage.setItem("isLoggedIn", "true");
+                sessionStorage.setItem("username", user);
+
+                alert("Access Granted. Redirecting to Command Dashboard...");
+                window.location.href = "dashboard.html"; // Updated redirect
+            } else {
+                errorMsg.classList.remove('hidden');
+                setTimeout(() => { errorMsg.classList.add('hidden'); }, 3000);
+            }
+        });
+    </script>
+
+</body>
+</html>

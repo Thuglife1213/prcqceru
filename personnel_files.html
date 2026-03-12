@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>201 PERSONNEL FILES | PRC-QC ERU</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen">
+
+    <div class="flex">
+        <aside class="w-64 bg-slate-950 min-h-screen p-6 border-r border-white/5 sticky top-0 h-screen">
+            <div class="flex items-center space-x-3 mb-10">
+                <img src="ERU.jpeg" class="h-8 w-auto rounded">
+                <span class="text-xs font-black uppercase tracking-widest text-red-600">Command Center</span>
+            </div>
+            <nav class="space-y-4">
+                <a href="dashboard.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase">Overview</a>
+                <a href="personnel_files.html" class="block text-xs font-bold text-white bg-red-600 p-3 rounded tracking-widest uppercase">201 Files</a>
+                <a href="meeting.html" class="block text-xs font-bold text-slate-400 hover:text-white p-3 tracking-widest uppercase">Meetings</a>
+            </nav>
+        </aside>
+
+        <main class="flex-grow p-8">
+            <header class="mb-12">
+                <h1 class="text-3xl font-black uppercase tracking-tighter text-white">201 Personnel Records</h1>
+                <p class="text-slate-500 text-sm font-medium tracking-tight">Standardized Documentation & Accountability System</p>
+            </header>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 bg-slate-900/50 rounded-2xl border border-white/5 p-6">
+                    <h3 class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-6">Select Personnel</h3>
+                    <div id="responderList" class="space-y-2">
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 bg-slate-900/50 rounded-2xl border border-white/5 p-8">
+                    <div id="fileManagerHeader" class="hidden">
+                        <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-6">
+                            <div>
+                                <h2 id="selectedName" class="text-xl font-black uppercase text-white">---</h2>
+                                <p id="selectedMaab" class="text-xs font-mono text-red-500">---</p>
+                            </div>
+                            <button onclick="document.getElementById('fileInput').click()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest transition">
+                                Upload New Document
+                            </button>
+                            <input type="file" id="fileInput" class="hidden" onchange="handleFileUpload(event)">
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="text-slate-500 uppercase text-[10px] font-black tracking-widest">
+                                        <th class="pb-4">Document Name</th>
+                                        <th class="pb-4">Type</th>
+                                        <th class="pb-4 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fileTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="emptyState" class="h-64 flex items-center justify-center text-slate-600 italic text-sm">
+                        Select a responder from the left to manage 201 files.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let responders = JSON.parse(localStorage.getItem('eru_responders')) || [];
+        let personnelDocs = JSON.parse(localStorage.getItem('eru_201_docs')) || {};
+        let currentResponderIndex = null;
+
+        function init() {
+            const list = document.getElementById('responderList');
+            list.innerHTML = '';
+            responders.forEach((resp, index) => {
+                list.innerHTML += `
+                    <button onclick="selectResponder(${index})" class="w-full text-left p-4 rounded-xl border border-white/5 hover:bg-red-600 group transition-all">
+                        <p class="font-bold text-slate-100 group-hover:text-white text-sm uppercase">${resp.name}</p>
+                        <p class="text-[9px] text-slate-500 group-hover:text-red-200 font-mono">${resp.maab}</p>
+                    </button>
+                `;
+            });
+        }
+
+        function selectResponder(index) {
+            currentResponderIndex = index;
+            const resp = responders[index];
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('fileManagerHeader').classList.remove('hidden');
+            document.getElementById('selectedName').innerText = resp.name;
+            document.getElementById('selectedMaab').innerText = `MAAB ID: ${resp.maab}`;
+            renderFiles();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file || currentResponderIndex === null) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const maab = responders[currentResponderIndex].maab;
+                if (!personnelDocs[maab]) personnelDocs[maab] = [];
+
+                personnelDocs[maab].push({
+                    name: file.name,
+                    type: file.type.split('/')[1].toUpperCase(),
+                    data: e.target.result // Base64 representation
+                });
+
+                localStorage.setItem('eru_201_docs', JSON.stringify(personnelDocs));
+                renderFiles();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderFiles() {
+            const maab = responders[currentResponderIndex].maab;
+            const body = document.getElementById('fileTableBody');
+            body.innerHTML = '';
+
+            const docs = personnelDocs[maab] || [];
+            docs.forEach((doc, idx) => {
+                body.innerHTML += `
+                    <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+                        <td class="py-4 font-medium text-slate-300">${doc.name}</td>
+                        <td class="py-4 text-[10px] font-black text-slate-500 uppercase">${doc.type}</td>
+                        <td class="py-4 text-right">
+                            <button onclick="downloadFile('${maab}', ${idx})" class="text-blue-500 hover:text-blue-400 font-black text-[10px] uppercase mr-4">Download</button>
+                            <button onclick="deleteFile('${maab}', ${idx})" class="text-red-900 hover:text-red-600 font-black text-[10px] uppercase">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function downloadFile(maab, idx) {
+            const doc = personnelDocs[maab][idx];
+            const link = document.createElement('a');
+            link.href = doc.data;
+            link.download = doc.name;
+            link.click();
+        }
+
+        function deleteFile(maab, idx) {
+            if(confirm("Confirm deletion of this record?")) {
+                personnelDocs[maab].splice(idx, 1);
+                localStorage.setItem('eru_201_docs', JSON.stringify(personnelDocs));
+                renderFiles();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
